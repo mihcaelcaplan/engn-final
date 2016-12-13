@@ -5,13 +5,13 @@ import re
 from datetime import date
 
 temp1 = "no data"
+temp2 = "no data"
 #spoofData1 = "1: 21.56"
 # spoofData2 = "2: 22.60"
 
 todayDate = date.today()
 
-
-ser = serial.Serial('/dev/ttyACM0', 9600) #change to /dev/tty?
+ser = serial.Serial('/dev/rfcomm0', 9600) 
 
 appUrl = "https://script.google.com/macros/s/AKfycbzzlP4cezvCwk4kBNd7Oqy_gAkRoRyjOswl9M2dUeEMUIjQCFEM/exec"
 
@@ -44,9 +44,9 @@ except:
 try:
 	temp2 = float(str(templist[3][0]))
 except:
-	print "templist 3 no good"
+	print "templist 4 no good"
 
-print temp1
+#print temp1
 
 #temp2 =  float(line[11:16])
 params = {
@@ -55,5 +55,17 @@ params = {
 	"sheet":todayDate
 
 }
+
 requests.get(appUrl, params=params)
 
+
+## set any temps that need to be set
+
+tempToSet = requests.get("https://script.google.com/macros/s/AKfycbwgqd_FgWQGQALPWGxY-6HDmNVtiBbdf6EIQo3jok3Bgrddgtc/exec?tempRequest=yes").content
+
+if((abs(float(tempToSet)-float(temp1)) > 1)):
+	ser.write(tempToSet)
+	print "setting temp to " + tempToSet
+	
+else:
+	requests.get("https://script.google.com/macros/s/AKfycbwgqd_FgWQGQALPWGxY-6HDmNVtiBbdf6EIQo3jok3Bgrddgtc/exec?tempSet=yes")			
