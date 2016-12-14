@@ -1,0 +1,25 @@
+pairing protocol for hc-05:
+
+connect to arduino correctly lol
+
+bluetoothctl
+
+# scan on
+	find mac of hc-05
+	also accessible in AT command mode with AT-ADDR? with arduino
+
+# agent on
+# pair xx:xx:xx:xx:xx:xx
+
+# enter passkey 
+	1234 by default 
+
+exit bluetoothctl
+
+bind hc-05 to rfcomm with 
+$ sudo rfcomm bind 0 xx:xx:xx:xx:xx:xx
+
+98:D3:31:FC:44:24
+
+added a crontab event to bind to rfcomm @reboot
+n
